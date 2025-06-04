@@ -5,10 +5,6 @@ author: Oldřich Kruchňa
 email: kruchna.o@gmail.com
 """
 
-from contextlib import nullcontext
-from numbers import Number
-
-
 TEXTS = [
     '''Situated about 10 miles west of Kemmerer,
     Fossil Butte is a ruggedly impressive
@@ -69,4 +65,45 @@ else:
     exit()
 
 print('----------------------------------------')
-print(text_to_analyze_index)
+
+text = TEXTS[text_to_analyze_index - 1]
+words = text.split(' ')
+
+titlecase_count = 0
+uppercase_count = 0
+lowercase_count = 0
+number_count = 0
+sum = 0
+sanitized_word_count = 0
+
+for word in words:
+    sanitized_word = word.rstrip('\n.,')
+    
+    if (not sanitized_word):
+        continue
+
+    sanitized_word_count = sanitized_word_count + 1
+
+    if (sanitized_word.isdigit()):
+        number_count = number_count + 1
+        sum = sum + int(sanitized_word)
+        continue    
+
+    if (sanitized_word.istitle()):
+        titlecase_count = titlecase_count + 1
+        continue    
+
+    if (sanitized_word.isupper()):
+        uppercase_count = uppercase_count + 1
+        continue    
+
+    if (sanitized_word.islower()):
+        lowercase_count = lowercase_count + 1
+        continue    
+
+print(f'There {'is' if sanitized_word_count == 1 else 'are' } {sanitized_word_count} {'word' if sanitized_word_count == 1 else 'words' } in the selected text.')
+print(f'There {'is' if titlecase_count == 1 else 'are' } {titlecase_count} titlecase {'word' if titlecase_count == 1 else 'words' }.')
+print(f'There {'is' if uppercase_count == 1 else 'are' } {uppercase_count} uppercase {'word' if uppercase_count == 1 else 'words' }.')
+print(f'There {'is' if lowercase_count == 1 else 'are' } {lowercase_count} lowercase {'word' if lowercase_count == 1 else 'words' }.')
+print(f'There {'is' if number_count == 1 else 'are' } {number_count} numeric {'string' if number_count == 1 else 'strings' }.')
+print(f'The sum of all the numbers {sum}.')
